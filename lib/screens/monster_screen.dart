@@ -18,7 +18,18 @@ class MonsterScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text(monster.name),
+        title: Text(
+          monster.name,
+          style: Theme.of(context).appBarTheme.titleTextStyle,
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              print('${monster.name} agregado a favoritos');
+            },
+            icon: const Icon(Icons.favorite_border_outlined),
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: monsterProvider.getMonsterDetails(monster.index),

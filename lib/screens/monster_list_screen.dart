@@ -1,45 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:proyecto_final/models/monster.dart';
 import 'package:proyecto_final/providers/monster_provider.dart';
-import 'package:easy_search_bar/easy_search_bar.dart';
 
-class MonsterListScreen extends StatefulWidget {
+class MonsterListScreen extends StatelessWidget {
   const MonsterListScreen({super.key});
-
-  @override
-  State<MonsterListScreen> createState() => _MonsterListScreenState();
-}
-
-class _MonsterListScreenState extends State<MonsterListScreen> {
-  String searchValue = '';
 
   @override
   Widget build(BuildContext context) {
     final monsterProvider = Provider.of<MonsterProvider>(context, listen: true);
 
     return Scaffold(
-      appBar: EasySearchBar(
-        title: const Text('Monster'),
-        onSearch: (searchValue) {
-          monsterProvider.filterMonsterList(searchValue);
-        },
-        suggestions: monsterProvider.suggestions.values.toList(),
-        onSuggestionTap: (data) => Navigator.pushNamed(
-            context, 'monster details',
-            arguments: monsterProvider.getMonsterDetailsFromName(data)),
+      appBar: AppBar(
+        title: const Text('Monsters'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              print('Busqueda');
+              showSearch(context: context, delegate: CustomSearchDelegate());
+            },
+            icon: const Icon(Icons.search),
+          ),
+        ],
       ),
-      // AppBar(
-      //   title: const Text('Monsters'),
-      //   actions: [
-      //     IconButton(
-      //       onPressed: () {
-      //         print('Busqueda');
-      //       },
-      //       icon: const Icon(Icons.search),
-      //     ),
-      //   ],
-      // ),
       body: FutureBuilder(
         future: monsterProvider.getMonsters(),
         builder: (_, AsyncSnapshot snapshot) {
@@ -73,6 +57,75 @@ class _MonsterListScreenState extends State<MonsterListScreen> {
           );
         },
       ),
+    );
+  }
+}
+
+class CustomSearchDelegate extends SearchDelegate {
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        onPressed: () {
+          query = '';
+        },
+        icon: const Icon(Icons.clear),
+      ),
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        close(context, null);
+      },
+      icon: Icon(Icons.arrow_back),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final monsterProvider = Provider.of<MonsterProvider>(context);
+    var searchTerms = monsterProvider.monsterList;
+    List<Result> matchQuery = [];
+    for (Result monster in searchTerms) {
+      if (monster.name.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(monster);
+      }
+    }
+
+    return ListView.builder(
+      itemCount: matchQuery.length,
+      itemBuilder: (context, index) {
+        Result result = matchQuery[index];
+        return ListTile(
+          title: Text(result.name),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final monsterProvider = Provider.of<MonsterProvider>(context);
+    var searchTerms = monsterProvider.monsterList;
+    List<Result> matchQuery = [];
+    for (Result monster in searchTerms) {
+      if (monster.name.toLowerCase().contains(query.toLowerCase())) {
+        matchQuery.add(monster);
+      }
+    }
+    return ListView.builder(
+      itemCount: matchQuery.length,
+      itemBuilder: (context, index) {
+        Result result = matchQuery[index];
+        return ListTile(
+          title: Text(result.name),
+          onTap: () => Navigator.pushNamed(context, 'monster details',
+              arguments: result),
+        );
+      },
     );
   }
 }

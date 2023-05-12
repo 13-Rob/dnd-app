@@ -13,9 +13,13 @@ class HomeScreen extends StatelessWidget {
       body: ListView.separated(
         itemBuilder: (_, index) {
           return ListTile(
-            title: Text(AppRoutes.menuOptions[index].name),
+            title: Text(
+              AppRoutes.menuOptions[index].name,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
             onTap: () => Navigator.pushNamed(
                 context, AppRoutes.menuOptions[index].route),
+            trailing: const Icon(Icons.arrow_forward_ios),
           );
         },
         separatorBuilder: (_, __) => const Divider(thickness: 1),
