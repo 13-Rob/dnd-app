@@ -20,7 +20,6 @@ class Stats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Container(
       margin: const EdgeInsets.only(top: 16, left: 20, right: 20),
       decoration: BoxDecoration(

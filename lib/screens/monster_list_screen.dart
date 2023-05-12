@@ -17,7 +17,6 @@ class MonsterListScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              print('Busqueda');
               showSearch(context: context, delegate: CustomSearchDelegate());
             },
             icon: const Icon(Icons.search),
@@ -80,7 +79,7 @@ class CustomSearchDelegate extends SearchDelegate {
       onPressed: () {
         close(context, null);
       },
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
     );
   }
 

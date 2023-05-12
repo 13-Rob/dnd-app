@@ -35,7 +35,7 @@ class MonsterScreen extends StatelessWidget {
         future: monsterProvider.getMonsterDetails(monster.index),
         builder: (_, snapshot) {
           if (snapshot.hasData) {
-            MonsterDetails monsterData = snapshot.data! as MonsterDetails;
+            MonsterDetails monsterData = snapshot.data!;
             return SingleChildScrollView(
               child: Center(
                 child: Column(
@@ -51,10 +51,11 @@ class MonsterScreen extends StatelessWidget {
                       wisdom: monsterData.wisdom,
                       charisma: monsterData.charisma,
                     ),
-                    if (monsterData.specialAbilities != null)
+                    if (monsterData.specialAbilities!.isNotEmpty)
                       _SpecialAbilities(
                           abilities: monsterData.specialAbilities!),
-                    _Actions(monsterActions: monsterData.actions),
+                    if (monsterData.actions!.isNotEmpty)
+                      _Actions(monsterActions: monsterData.actions!),
                   ],
                 ),
               ),
@@ -193,16 +194,12 @@ class _MonsterImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        border:
-            Border.all(color: Theme.of(context).primaryColorDark, width: 10),
-      ),
       margin: const EdgeInsets.symmetric(horizontal: 20),
       width: size.width,
       height: 300,
       child: FadeInImage(
         placeholder: const AssetImage('assets/loading.gif'),
-        image: NetworkImage('http://www.dnd5eapi.co${image}'),
+        image: NetworkImage('http://www.dnd5eapi.co$image'),
         fit: BoxFit.cover,
       ),
     );
@@ -210,7 +207,7 @@ class _MonsterImage extends StatelessWidget {
 }
 
 class _Description extends StatelessWidget {
-  const _Description({super.key, required this.monster});
+  const _Description({required this.monster});
 
   final MonsterDetails monster;
 

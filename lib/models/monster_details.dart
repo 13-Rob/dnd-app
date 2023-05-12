@@ -36,7 +36,7 @@ class MonsterDetails {
   double challengeRating;
   int xp;
   List<SpecialAbility>? specialAbilities;
-  List<MonsterDetailsAction> actions;
+  List<MonsterDetailsAction>? actions;
   String? image;
   String url;
 
@@ -67,7 +67,7 @@ class MonsterDetails {
     required this.challengeRating,
     required this.xp,
     this.specialAbilities,
-    required this.actions,
+    this.actions,
     this.image,
     required this.url,
   });
@@ -144,7 +144,7 @@ class MonsterDetails {
         "xp": xp,
         "special_abilities":
             List<dynamic>.from(specialAbilities!.map((x) => x.toJson())),
-        "actions": List<dynamic>.from(actions.map((x) => x.toJson())),
+        "actions": List<dynamic>.from(actions!.map((x) => x.toJson())),
         "image": image,
         "url": url,
       };
