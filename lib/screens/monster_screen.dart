@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:proyecto_final/models/monster.dart';
+import 'package:proyecto_final/models/results.dart';
 import 'package:proyecto_final/models/monster_details.dart';
 import 'package:proyecto_final/providers/monster_provider.dart';
 import 'package:proyecto_final/widgets/custom_divider_widget.dart';

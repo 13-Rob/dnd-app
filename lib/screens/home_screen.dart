@@ -20,6 +20,7 @@ class HomeScreen extends StatelessWidget {
             onTap: () => Navigator.pushNamed(
                 context, AppRoutes.menuOptions[index].route),
             trailing: const Icon(Icons.arrow_forward_ios),
+            leading: Icon(AppRoutes.menuOptions[index].icon),
           );
         },
         separatorBuilder: (_, __) => const Divider(thickness: 1),

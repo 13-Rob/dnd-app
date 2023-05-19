@@ -1,24 +1,23 @@
 // To parse this JSON data, do
 //
-//     final monstersResult = monstersResultFromJson(jsonString);
+//     final Results = ResultsFromJson(jsonString);
 
 import 'dart:convert';
 
-MonstersResult monstersResultFromJson(String str) =>
-    MonstersResult.fromJson(json.decode(str));
+Results ResultsFromJson(String str) => Results.fromJson(json.decode(str));
 
-String monstersResultToJson(MonstersResult data) => json.encode(data.toJson());
+String ResultsToJson(Results data) => json.encode(data.toJson());
 
-class MonstersResult {
+class Results {
   int count;
   List<Result> results;
 
-  MonstersResult({
+  Results({
     required this.count,
     required this.results,
   });
 
-  factory MonstersResult.fromJson(Map<String, dynamic> json) => MonstersResult(
+  factory Results.fromJson(Map<String, dynamic> json) => Results(
         count: json["count"],
         results:
             List<Result>.from(json["results"].map((x) => Result.fromJson(x))),

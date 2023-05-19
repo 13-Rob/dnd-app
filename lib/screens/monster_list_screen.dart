@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:proyecto_final/models/monster.dart';
-import 'package:proyecto_final/providers/monster_provider.dart';
+import 'package:proyecto_final/models/results.dart';
+import 'package:proyecto_final/providers/results_provider.dart';
 
 class MonsterListScreen extends StatelessWidget {
   const MonsterListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final monsterProvider = Provider.of<MonsterProvider>(context, listen: true);
+    final monsterProvider = Provider.of<ResultsProvider>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(
@@ -24,7 +24,7 @@ class MonsterListScreen extends StatelessWidget {
         ],
       ),
       body: FutureBuilder(
-        future: monsterProvider.getMonsters(),
+        future: monsterProvider.getResults('monsters'),
         builder: (_, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
             return const Center(
@@ -85,7 +85,7 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    final monsterProvider = Provider.of<MonsterProvider>(context);
+    final monsterProvider = Provider.of<ResultsProvider>(context);
     var searchTerms = monsterProvider.monsterList;
     List<Result> matchQuery = [];
     for (Result monster in searchTerms) {
@@ -107,7 +107,7 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final monsterProvider = Provider.of<MonsterProvider>(context);
+    final monsterProvider = Provider.of<ResultsProvider>(context);
     var searchTerms = monsterProvider.monsterList;
     List<Result> matchQuery = [];
     for (Result monster in searchTerms) {
