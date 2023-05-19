@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:proyecto_final/models/monster_info.dart';
 import 'package:proyecto_final/models/results.dart';
-import 'package:proyecto_final/models/monster_details.dart';
 
 class MonsterInfoProvider extends ChangeNotifier {
   final String _baseUrl = 'api.open5e.com';

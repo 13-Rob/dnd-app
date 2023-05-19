@@ -18,7 +18,7 @@ class MonsterInfo {
   String? group;
   String alignment;
   int armorClass;
-  String armorDesc;
+  String? armorDesc;
   int hitPoints;
   String hitDice;
   Speed speed;
@@ -34,7 +34,7 @@ class MonsterInfo {
   int? intelligenceSave;
   int? wisdomSave;
   int? charismaSave;
-  int perception;
+  int? perception;
   Skills skills;
   String damageVulnerabilities;
   String damageResistances;
@@ -47,11 +47,11 @@ class MonsterInfo {
   List<Action> actions;
   String reactions;
   String legendaryDesc;
-  List<LegendaryAction> legendaryActions;
-  List<LegendaryAction> specialAbilities;
+  List<LegendaryAction>? legendaryActions;
+  List<LegendaryAction>? specialAbilities;
   List<dynamic> spellList;
   int pageNo;
-  String imgMain;
+  String? imgMain;
   String documentSlug;
   String documentTitle;
   String documentLicenseUrl;
@@ -66,7 +66,7 @@ class MonsterInfo {
     this.group,
     required this.alignment,
     required this.armorClass,
-    required this.armorDesc,
+    this.armorDesc,
     required this.hitPoints,
     required this.hitDice,
     required this.speed,
@@ -82,7 +82,7 @@ class MonsterInfo {
     this.intelligenceSave,
     this.wisdomSave,
     this.charismaSave,
-    required this.perception,
+    this.perception,
     required this.skills,
     required this.damageVulnerabilities,
     required this.damageResistances,
@@ -95,11 +95,11 @@ class MonsterInfo {
     required this.actions,
     required this.reactions,
     required this.legendaryDesc,
-    required this.legendaryActions,
-    required this.specialAbilities,
+    this.legendaryActions,
+    this.specialAbilities,
     required this.spellList,
     required this.pageNo,
-    required this.imgMain,
+    this.imgMain,
     required this.documentSlug,
     required this.documentTitle,
     required this.documentLicenseUrl,
@@ -145,8 +145,10 @@ class MonsterInfo {
             List<Action>.from(json["actions"].map((x) => Action.fromJson(x))),
         reactions: json["reactions"],
         legendaryDesc: json["legendary_desc"],
-        legendaryActions: List<LegendaryAction>.from(
-            json["legendary_actions"].map((x) => LegendaryAction.fromJson(x))),
+        legendaryActions: json["legendary_actions"] != ""
+            ? List<LegendaryAction>.from(json["legendary_actions"]
+                .map((x) => LegendaryAction.fromJson(x))!)
+            : null,
         specialAbilities: List<LegendaryAction>.from(
             json["special_abilities"].map((x) => LegendaryAction.fromJson(x))),
         spellList: List<dynamic>.from(json["spell_list"].map((x) => x)),
@@ -197,9 +199,9 @@ class MonsterInfo {
         "reactions": reactions,
         "legendary_desc": legendaryDesc,
         "legendary_actions":
-            List<dynamic>.from(legendaryActions.map((x) => x.toJson())),
+            List<dynamic>.from(legendaryActions!.map((x) => x.toJson())),
         "special_abilities":
-            List<dynamic>.from(specialAbilities.map((x) => x.toJson())),
+            List<dynamic>.from(specialAbilities!.map((x) => x.toJson())),
         "spell_list": List<dynamic>.from(spellList.map((x) => x)),
         "page_no": pageNo,
         "img_main": imgMain,
@@ -264,41 +266,113 @@ class LegendaryAction {
 }
 
 class Skills {
-  int history;
-  int perception;
+  int? athletics;
+  int? acrobatics;
+  // int? sleight_of_hand
+  int? stealth;
+  int? arcana;
+  int? history;
+  int? investigation;
+  int? nature;
+  int? religion;
+  // int? animal_handling
+  int? insight;
+  int? medicine;
+  int? perception;
+  int? survival;
+  int? deception;
+  int? intimidation;
+  int? performance;
+  int? persuasion;
 
   Skills({
-    required this.history,
-    required this.perception,
+    this.athletics,
+    this.acrobatics,
+    // int? sleight_of_hand
+    this.stealth,
+    this.arcana,
+    this.history,
+    this.investigation,
+    this.nature,
+    this.religion,
+    // int? animal_handling
+    this.insight,
+    this.medicine,
+    this.perception,
+    this.survival,
+    this.deception,
+    this.intimidation,
+    this.performance,
+    this.persuasion,
   });
 
   factory Skills.fromJson(Map<String, dynamic> json) => Skills(
+        athletics: json["athletics"],
+        acrobatics: json["acrobatics"],
+        // sleight_of_handstealth: json["sleight_of_handstealth"],
+        arcana: json["arcana"],
         history: json["history"],
+        investigation: json["investigation"],
+        nature: json["nature"],
+        religion: json["religion"],
+        // animal_handlinginsight: json["animal_handlinginsight"],
+        medicine: json["medicine"],
         perception: json["perception"],
+        survival: json["survival"],
+        deception: json["deception"],
+        intimidation: json["intimidation"],
+        performance: json["performance"],
+        persuasion: json["persuasion"],
       );
 
   Map<String, dynamic> toJson() => {
+        "athletics": athletics,
+        "acrobatics": acrobatics,
+        // "sleight_of_handstealth": sleight_of_handstealth,
+        "arcana": arcana,
         "history": history,
+        "investigation": investigation,
+        "nature": nature,
+        "religion": religion,
+        // "animal_handlinginsight": animal_handlinginsight,
+        "medicine": medicine,
         "perception": perception,
+        "survival": survival,
+        "deception": deception,
+        "intimidation": intimidation,
+        "performance": performance,
+        "persuasion": persuasion,
       };
 }
 
 class Speed {
-  int walk;
-  int swim;
+  int? walk;
+  int? swim;
+  int? climb;
+  int? burrow;
+  int? fly;
 
   Speed({
-    required this.walk,
-    required this.swim,
+    this.walk,
+    this.swim,
+    this.climb,
+    this.burrow,
+    this.fly,
   });
 
   factory Speed.fromJson(Map<String, dynamic> json) => Speed(
         walk: json["walk"],
         swim: json["swim"],
+        climb: json["climb"],
+        burrow: json["burrow"],
+        fly: json["fly"],
       );
 
   Map<String, dynamic> toJson() => {
         "walk": walk,
         "swim": swim,
+        "climb": climb,
+        "burrow": burrow,
+        "fly": fly,
       };
 }

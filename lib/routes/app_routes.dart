@@ -17,7 +17,7 @@ class AppRoutes {
       route: 'monsters',
       icon: Icons.warning,
       name: 'Monsters',
-      screen: const MonsterTiles(),
+      screen: const MonsterListScreen(),
     ),
     MenuOption(
       route: 'test',

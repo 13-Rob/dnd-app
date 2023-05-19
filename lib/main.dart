@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Material App',
-      initialRoute: 'test',
+      initialRoute: AppRoutes.initialRoute,
       routes: AppRoutes.getRoutes(),
       theme: ThemeData(primarySwatch: Colors.red).copyWith(
         appBarTheme: const AppBarTheme(color: Color.fromARGB(255, 119, 22, 22)),
