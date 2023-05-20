@@ -10,7 +10,7 @@ class MonsterSearch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search Screen'),
+        title: const Text('Monsters'),
         actions: [
           IconButton(
             onPressed: () {

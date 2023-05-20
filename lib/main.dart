@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proyecto_final/providers/monster_info_provider.dart';
+import 'package:proyecto_final/providers/ui_provider.dart';
 import 'package:proyecto_final/routes/app_routes.dart';
 
 void main() => runApp(const AppState());
@@ -12,6 +13,7 @@ class AppState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => UiProvider()),
         ChangeNotifierProvider(
           create: (_) => MonsterInfoProvider(),
           lazy: true,

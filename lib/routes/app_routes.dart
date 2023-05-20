@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final/models/menu_options.dart';
-import 'package:proyecto_final/screens/monster_search_screen.dart';
 import 'package:proyecto_final/screens/screens.dart';
-import 'package:proyecto_final/screens/test_screen.dart';
 
 class AppRoutes {
   static const initialRoute = 'home';
@@ -14,12 +12,6 @@ class AppRoutes {
       name: 'Monsters Menu',
       screen: const MonsterSearch(),
     ),
-    MenuOption(
-      route: 'test',
-      icon: Icons.telegram,
-      name: 'Test',
-      screen: const TestScreen(),
-    )
   ];
 
   static Map<String, Widget Function(BuildContext)> getRoutes() {

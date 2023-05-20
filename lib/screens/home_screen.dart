@@ -1,31 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_final/routes/app_routes.dart';
+import 'package:provider/provider.dart';
+import 'package:proyecto_final/providers/ui_provider.dart';
+import 'package:proyecto_final/widgets/custom_navigation_bar.dart';
+import 'package:proyecto_final/screens/screens.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Proyecto Final'),
-      ),
-      body: ListView.separated(
-        itemBuilder: (_, index) {
-          return ListTile(
-            title: Text(
-              AppRoutes.menuOptions[index].name,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-            onTap: () => Navigator.pushNamed(
-                context, AppRoutes.menuOptions[index].route),
-            trailing: const Icon(Icons.arrow_forward_ios),
-            leading: Icon(AppRoutes.menuOptions[index].icon),
-          );
-        },
-        separatorBuilder: (_, __) => const Divider(thickness: 1),
-        itemCount: AppRoutes.menuOptions.length,
-      ),
+    return const Scaffold(
+      body: _HomePageBody(),
+      bottomNavigationBar: CustomNavgationBar(),
     );
+  }
+}
+
+class _HomePageBody extends StatelessWidget {
+  const _HomePageBody({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final uiProvider = Provider.of<UiProvider>(context);
+    final currentIndex = uiProvider.selectedMenuOption;
+
+    switch (currentIndex) {
+      case 0:
+        return const WeaponsScreen();
+
+      case 1:
+        return const MonsterSearch();
+
+      default:
+        return const WeaponsScreen();
+    }
   }
 }
