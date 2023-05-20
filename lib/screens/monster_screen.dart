@@ -1,9 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:proyecto_final/models/results.dart';
-import 'package:proyecto_final/models/monster_details.dart';
-import 'package:proyecto_final/providers/monster_provider.dart';
+import 'package:proyecto_final/models/monster_info.dart' as mon;
 import 'package:proyecto_final/widgets/custom_divider_widget.dart';
 import 'package:proyecto_final/widgets/stats_widget.dart';
 
@@ -12,211 +8,193 @@ class MonsterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Result monster = ModalRoute.of(context)?.settings.arguments as Result;
-    final monsterProvider =
-        Provider.of<MonsterProvider>(context, listen: false);
-    final size = MediaQuery.of(context).size;
+    final mon.MonsterInfo monsterData =
+        ModalRoute.of(context)?.settings.arguments as mon.MonsterInfo;
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          monster.name,
+          monsterData.name,
           style: Theme.of(context).appBarTheme.titleTextStyle,
         ),
         actions: [
           IconButton(
             onPressed: () {
-              print('${monster.name} agregado a favoritos');
+              print('${monsterData.name} agregado a favoritos');
             },
             icon: const Icon(Icons.favorite_border_outlined),
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: monsterProvider.getMonsterDetails(monster.index),
-        builder: (_, snapshot) {
-          if (snapshot.hasData) {
-            MonsterDetails monsterData = snapshot.data!;
-            return SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  children: [
-                    _Description(monster: snapshot.data as MonsterDetails),
-                    if (monsterData.image != null)
-                      _MonsterImage(size: size, image: monsterData.image!),
-                    Stats(
-                      strength: monsterData.strength,
-                      dexterity: monsterData.dexterity,
-                      constitution: monsterData.constitution,
-                      intelligence: monsterData.intelligence,
-                      wisdom: monsterData.wisdom,
-                      charisma: monsterData.charisma,
-                    ),
-                    if (monsterData.specialAbilities!.isNotEmpty)
-                      _SpecialAbilities(
-                          abilities: monsterData.specialAbilities!),
-                    if (monsterData.actions!.isNotEmpty)
-                      _Actions(monsterActions: monsterData.actions!),
-                  ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 30.0),
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _MonsterHeader(monster: monsterData),
+                _DescriptionAndImage(monster: monsterData),
+                Stats(
+                  strength: monsterData.strength,
+                  dexterity: monsterData.dexterity,
+                  constitution: monsterData.constitution,
+                  intelligence: monsterData.intelligence,
+                  wisdom: monsterData.wisdom,
+                  charisma: monsterData.charisma,
                 ),
-              ),
-            );
-          }
-          return const Center(child: CupertinoActivityIndicator());
-        },
+                const CustomDivider(),
+                _Actions(actions: monsterData.actions),
+                if (monsterData.specialAbilities != null)
+                  _NameAndDescList(
+                      name: 'Special Abilities',
+                      abilities: monsterData.specialAbilities!),
+                if (monsterData.legendaryActions != null)
+                  _NameAndDescList(
+                      name: 'Legendary Actions',
+                      abilities: monsterData.legendaryActions!),
+                const CustomDivider()
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
 }
 
-class _SpecialAbilities extends StatelessWidget {
-  const _SpecialAbilities({required this.abilities});
+class _MonsterHeader extends StatelessWidget {
+  const _MonsterHeader({super.key, required this.monster});
 
-  final List<SpecialAbility> abilities;
+  final mon.MonsterInfo monster;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 20.0),
-          child: Text(
-            'Special Abilities',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+    return Padding(
+      padding: const EdgeInsets.only(top: 16, bottom: 12, left: 40, right: 40),
+      child: Column(
+        children: [
+          Text('Hit Points: ${monster.hitPoints} (${monster.hitDice})'),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Armor Class: ${monster.armorClass}'),
+              if (monster.speed.walk != null)
+                Text('Speed: ${monster.speed.walk} ft.'),
+            ],
           ),
-        ),
-        Column(
-          children: abilities.map((e) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 16, left: 20, right: 20),
-              child: Container(
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.black)),
-                padding: const EdgeInsets.all(16),
-                width: double.infinity,
-                child: RichText(
-                  textAlign: TextAlign.justify,
-                  text: TextSpan(
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 14.0,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: '${e.name}: ',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      TextSpan(
-                        text: e.desc,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
+        ],
+      ),
     );
+  }
+}
+
+class _NameAndDescList extends StatelessWidget {
+  const _NameAndDescList(
+      {super.key, required this.name, required this.abilities});
+
+  final String name;
+  final List<mon.LegendaryAction> abilities;
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+        tilePadding: const EdgeInsets.symmetric(horizontal: 40),
+        title: Text(name),
+        childrenPadding: const EdgeInsets.only(bottom: 8),
+        children: abilities
+            .map((e) => Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Text(e.name),
+                ))
+            .toList());
   }
 }
 
 class _Actions extends StatelessWidget {
-  const _Actions({
-    required this.monsterActions,
+  const _Actions({super.key, required this.actions});
+
+  final List<mon.Action> actions;
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      tilePadding: const EdgeInsets.symmetric(horizontal: 40),
+      title: const Text('Actions'),
+      childrenPadding: const EdgeInsets.only(bottom: 8),
+      children: actions
+          .map((e) => Padding(
+                padding: const EdgeInsets.all(6),
+                child: Text(e.name),
+              ))
+          .toList(),
+    );
+    // Padding(
+    //   padding: const EdgeInsets.symmetric(vertical: 4),
+    //   child: Column(
+    //     children: [
+    //       const Padding(
+    //         padding: EdgeInsets.only(bottom: 4.0),
+    //         child: Text(
+    //           'Actions:',
+    //           style: TextStyle(fontWeight: FontWeight.bold),
+    //         ),
+    //       ),
+    //       ...actions.map(
+    //         (e) {
+    //           return Padding(
+    //             padding:
+    //                 const EdgeInsets.symmetric(vertical: 4, horizontal: 30),
+    //             child: Center(
+    //               child: RichText(
+    //                 textAlign: TextAlign.justify,
+    //                 text: TextSpan(
+    //                   style: const TextStyle(color: Colors.black),
+    //                   children: [
+    //                     TextSpan(text: e.name),
+    //                     if (e.damageDice != null)
+    //                       TextSpan(text: ': ${e.damageDice}'),
+    //                     if (e.damageBonus != null)
+    //                       TextSpan(text: '+${e.damageBonus}')
+    //                   ],
+    //                 ),
+    //               ),
+    //             ),
+    //           );
+    //   },
+    // ).toList(),
+    // ],
+    // ),
+  }
+}
+
+class _DescriptionAndImage extends StatelessWidget {
+  const _DescriptionAndImage({
+    super.key,
+    required this.monster,
   });
 
-  final List<MonsterDetailsAction> monsterActions;
+  final mon.MonsterInfo monster;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 20.0),
-          child: Text(
-            'Actions',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+        const CustomDivider(),
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: FadeInImage(
+            placeholder: const AssetImage('assets/loading.gif'),
+            image: NetworkImage(
+              monster.imgMain ??
+                  'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png',
             ),
+            fit: BoxFit.cover,
+            height: 250,
           ),
         ),
-        Column(
-          children: monsterActions.map((e) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 16, left: 20, right: 20),
-              child: Container(
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.black)),
-                padding: const EdgeInsets.all(16),
-                width: double.infinity,
-                child: RichText(
-                  textAlign: TextAlign.justify,
-                  text: TextSpan(
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 14.0,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: '${e.name}:\n',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(
-                        text: e.desc,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    );
-  }
-}
-
-class _MonsterImage extends StatelessWidget {
-  const _MonsterImage({
-    required this.size,
-    required this.image,
-  });
-
-  final Size size;
-  final String image;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      width: size.width,
-      height: 300,
-      child: FadeInImage(
-        placeholder: const AssetImage('assets/loading.gif'),
-        image: NetworkImage('http://www.dnd5eapi.co$image'),
-        fit: BoxFit.cover,
-      ),
-    );
-  }
-}
-
-class _Description extends StatelessWidget {
-  const _Description({required this.monster});
-
-  final MonsterDetails monster;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.only(top: 20, bottom: 10),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12),
           child: Text(
             '${monster.size} ${monster.type}, ${monster.alignment}',
             style: Theme.of(context).textTheme.titleMedium,

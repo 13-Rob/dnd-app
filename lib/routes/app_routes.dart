@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final/models/menu_options.dart';
+import 'package:proyecto_final/screens/monster_search_screen.dart';
 import 'package:proyecto_final/screens/screens.dart';
 import 'package:proyecto_final/screens/test_screen.dart';
 
@@ -8,16 +9,10 @@ class AppRoutes {
 
   static final menuOptions = [
     MenuOption(
-      route: 'rules',
-      icon: Icons.rule,
-      name: 'Rules',
-      screen: const RulesScreen(),
-    ),
-    MenuOption(
-      route: 'monsters',
+      route: 'monstersMenu',
       icon: Icons.warning,
-      name: 'Monsters',
-      screen: const MonsterListScreen(),
+      name: 'Monsters Menu',
+      screen: const MonsterSearch(),
     ),
     MenuOption(
       route: 'test',

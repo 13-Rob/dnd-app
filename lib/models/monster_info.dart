@@ -45,7 +45,7 @@ class MonsterInfo {
   String challengeRating;
   double? cr;
   List<Action> actions;
-  String reactions;
+  String? reactions;
   String legendaryDesc;
   List<LegendaryAction>? legendaryActions;
   List<LegendaryAction>? specialAbilities;
@@ -93,7 +93,7 @@ class MonsterInfo {
     required this.challengeRating,
     this.cr,
     required this.actions,
-    required this.reactions,
+    this.reactions,
     required this.legendaryDesc,
     this.legendaryActions,
     this.specialAbilities,
@@ -143,14 +143,16 @@ class MonsterInfo {
         cr: json["cr"],
         actions:
             List<Action>.from(json["actions"].map((x) => Action.fromJson(x))),
-        reactions: json["reactions"],
+        // reactions: json["reactions"],
         legendaryDesc: json["legendary_desc"],
         legendaryActions: json["legendary_actions"] != ""
             ? List<LegendaryAction>.from(json["legendary_actions"]
                 .map((x) => LegendaryAction.fromJson(x))!)
-            : null,
-        specialAbilities: List<LegendaryAction>.from(
-            json["special_abilities"].map((x) => LegendaryAction.fromJson(x))),
+            : [],
+        specialAbilities: json["special_abilities"] != ""
+            ? List<LegendaryAction>.from(json["special_abilities"]
+                .map((x) => LegendaryAction.fromJson(x)))
+            : [],
         spellList: List<dynamic>.from(json["spell_list"].map((x) => x)),
         pageNo: json["page_no"],
         imgMain: json["img_main"],
