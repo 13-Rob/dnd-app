@@ -28,8 +28,10 @@ class SearchResults {
         count: json["count"],
         next: json["next"],
         previous: json["previous"],
-        results: List<MonsterInfo>.from(
-            json["results"].map((x) => MonsterInfo.fromJson(x))),
+        results: json["results"] != null
+            ? List<MonsterInfo>.from(
+                json["results"].map((x) => MonsterInfo.fromJson(x)))
+            : [],
       );
 
   Map<String, dynamic> toJson() => {

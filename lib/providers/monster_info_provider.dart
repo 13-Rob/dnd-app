@@ -34,22 +34,31 @@ class MonsterInfoProvider extends ChangeNotifier {
   }
 
   getMonsterByCR([String term = '', String cr = '']) async {
-    // cr = 0;
-    // print(cr);
     final jsonData = await _getJsonData('monsters/', term, cr);
     final monsterResponse = SearchResults.fromJson(json.decode(jsonData));
-    // print(monsterResponse.results);
-    // print(jsonData);
     monsterList = monsterResponse.results;
   }
 
   Future<List<MonsterInfo>> getAllMonsterByCR([String cr = '']) async {
-    // cr = 0;
-    // print(cr);
+    List<String> crEspeciales = ["1/8", "1/4", "1/2"];
+    if (crEspeciales.contains(cr)) {
+      switch (cr) {
+        case "1/8":
+          cr = "0.125";
+          break;
+
+        case "1/4":
+          cr = "0.25";
+          break;
+
+        case "1/2":
+          cr = "0.5";
+          break;
+      }
+    }
+
     final jsonData = await _getJsonData('monsters/', '', cr);
     final monsterResponse = SearchResults.fromJson(json.decode(jsonData));
-    // print(monsterResponse.results);
-    // print(jsonData);
     return monsterResponse.results;
   }
 }

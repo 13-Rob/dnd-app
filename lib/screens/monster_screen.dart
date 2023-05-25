@@ -35,12 +35,7 @@ class MonsterScreen extends StatelessWidget {
                 _MonsterHeader(monster: monsterData),
                 _DescriptionAndImage(monster: monsterData),
                 Stats(
-                  strength: monsterData.strength,
-                  dexterity: monsterData.dexterity,
-                  constitution: monsterData.constitution,
-                  intelligence: monsterData.intelligence,
-                  wisdom: monsterData.wisdom,
-                  charisma: monsterData.charisma,
+                  monster: monsterData,
                 ),
                 const CustomDivider(),
                 _Actions(actions: monsterData.actions),

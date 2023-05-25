@@ -10,15 +10,13 @@ class ChallengeRatingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     final monsterProvider = Provider.of<MonsterInfoProvider>(context);
     final String challenge =
         ModalRoute.of(context)?.settings.arguments as String;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Challenge Rating'),
+        title: const Text('Monsters'),
         actions: [
           IconButton(
             onPressed: () {
@@ -38,29 +36,108 @@ class ChallengeRatingScreen extends StatelessWidget {
 
               return SizedBox(
                 width: double.infinity,
-                height: size.height * 0.5,
-                child: Swiper(
-                  layout: SwiperLayout.STACK,
-                  itemWidth: size.width * 0.8,
-                  itemHeight: size.height * 0.4,
-                  itemCount: monsterDataList.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () => Navigator.pushNamed(
-                          context, 'monsterDetails',
-                          arguments: monsterDataList[index]),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          color: Colors.red,
-                          child: Center(
-                            child: Text(monsterDataList[index].name),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: GridView.builder(
+                    padding: const EdgeInsets.only(top: 10, bottom: 20),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
+                      crossAxisCount: 2,
+                    ),
+                    itemCount: monsterDataList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return InkWell(
+                        onTap: () => Navigator.pushNamed(
+                            context, 'monsterDetails',
+                            arguments: monsterDataList[index]),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            color: const Color.fromARGB(255, 86, 86, 86),
+                            child: Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'HP: ${monsterDataList[index].hitPoints}',
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 227, 227, 227),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                    monsterDataList[index].name,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 24,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                    '${monsterDataList[index].size} ${monsterDataList[index].type}',
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 227, 226, 226),
+                                      fontSize: 18,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
+                // child: Swiper(
+                //   layout: SwiperLayout.STACK,
+                //   itemWidth: size.width * 0.8,
+                //   itemHeight: size.height * 0.4,
+                //   itemCount: monsterDataList.length,
+                //   itemBuilder: (context, index) {
+                //     return GestureDetector(
+                //       onTap: () => Navigator.pushNamed(
+                //           context, 'monsterDetails',
+                //           arguments: monsterDataList[index]),
+                //       child: ClipRRect(
+                //         borderRadius: BorderRadius.circular(20),
+                //         child: Container(
+                //           color: Colors.red,
+                //           child: Center(
+                //             child: Column(
+                //               mainAxisAlignment: MainAxisAlignment.center,
+                //               children: [
+                //                 Text(
+                //                   'HP: ${monsterDataList[index].hitPoints}',
+                //                   style: Theme.of(context).textTheme.titleLarge,
+                //                 ),
+                //                 const SizedBox(
+                //                   height: 10,
+                //                 ),
+                //                 Text(
+                //                   monsterDataList[index].name,
+                //                   style: Theme.of(context).textTheme.titleLarge,
+                //                 ),
+                //               ],
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     );
+                //   },
+                // ),
               );
             }
             return const CupertinoActivityIndicator();
@@ -104,12 +181,11 @@ class _CustomSearchDelegate extends SearchDelegate {
     List<MonsterInfo> searchTerms = monsterInfoProvider.monsterList;
     List<MonsterInfo> matchQuery = [];
 
-    // TODO: intenta realizar un find u otra funcion que no sea recorrer el for
-    for (MonsterInfo monster in searchTerms) {
-      if (monster.name.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(monster);
-      }
-    }
+    matchQuery = [
+      ...searchTerms
+          .where((e) => e.name.toLowerCase().contains(query.toLowerCase()))
+          .toList()
+    ];
 
     return ListView.builder(
       itemCount: matchQuery.length,
@@ -128,11 +204,12 @@ class _CustomSearchDelegate extends SearchDelegate {
     monsterInfoProvider.getMonsters(query);
     List<MonsterInfo> searchTerms = monsterInfoProvider.monsterList;
     List<MonsterInfo> matchQuery = [];
-    for (MonsterInfo monster in searchTerms) {
-      if (monster.name.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(monster);
-      }
-    }
+
+    matchQuery = [
+      ...searchTerms
+          .where((e) => e.name.toLowerCase().contains(query.toLowerCase()))
+          .toList()
+    ];
 
     return ListView.builder(
       itemCount: matchQuery.length,

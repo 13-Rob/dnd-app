@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:proyecto_final/providers/db_provider.dart';
+import 'package:proyecto_final/providers/favorite_provider.dart';
 import 'package:proyecto_final/providers/monster_info_provider.dart';
 import 'package:proyecto_final/providers/ui_provider.dart';
 import 'package:proyecto_final/routes/app_routes.dart';
@@ -13,6 +15,7 @@ class AppState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => FavoriteProvider()),
         ChangeNotifierProvider(create: (_) => UiProvider()),
         ChangeNotifierProvider(
           create: (_) => MonsterInfoProvider(),
