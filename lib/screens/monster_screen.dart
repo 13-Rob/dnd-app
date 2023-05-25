@@ -187,7 +187,7 @@ class _DescriptionAndImage extends StatelessWidget {
             placeholder: const AssetImage('assets/loading-icon.gif'),
             image: NetworkImage(
               monster.imgMain ??
-                  'https://drive.google.com/file/d/1NuQghQVg1wCxGqtyJsegXUJaG1i6HJOY/view?usp=sharing',
+                  'https://github.com/13-Rob/dnd-app/blob/main/assets/no-monster-image.png?raw=true',
             ),
             fit: BoxFit.cover,
             height: 250,

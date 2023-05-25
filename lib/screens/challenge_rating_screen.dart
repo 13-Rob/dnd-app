@@ -49,10 +49,13 @@ class ChallengeRatingScreen extends StatelessWidget {
                       onTap: () => Navigator.pushNamed(
                           context, 'monsterDetails',
                           arguments: monsterDataList[index]),
-                      child: Container(
-                        color: Colors.red,
-                        child: Center(
-                          child: Text(monsterDataList[index].name),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          color: Colors.red,
+                          child: Center(
+                            child: Text(monsterDataList[index].name),
+                          ),
                         ),
                       ),
                     );
