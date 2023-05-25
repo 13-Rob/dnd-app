@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final/models/menu_options.dart';
+import 'package:proyecto_final/screens/challenge_rating_screen.dart';
 import 'package:proyecto_final/screens/screens.dart';
 
 class AppRoutes {
@@ -12,6 +13,11 @@ class AppRoutes {
       name: 'Monsters Menu',
       screen: const MonsterSearch(),
     ),
+    MenuOption(
+      route: 'challengeRating',
+      name: 'Challenge Rating',
+      screen: const ChallengeRatingScreen(),
+    )
   ];
 
   static Map<String, Widget Function(BuildContext)> getRoutes() {
@@ -19,7 +25,7 @@ class AppRoutes {
 
     appRoutes.addAll({
       'home': (_) => const HomeScreen(),
-      'monster details': (_) => const MonsterScreen(),
+      'monsterDetails': (_) => const MonsterScreen(),
     });
 
     for (var option in menuOptions) {

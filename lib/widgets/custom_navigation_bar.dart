@@ -15,11 +15,11 @@ class CustomNavgationBar extends StatelessWidget {
       currentIndex: currentIndex,
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.abc),
-          label: 'Rules',
+          icon: Icon(Icons.favorite),
+          label: 'Favorite',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.warning),
+          icon: Icon(Icons.pets),
           label: 'Monsters',
         ),
       ],

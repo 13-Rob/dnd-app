@@ -1,18 +1,24 @@
+import 'package:card_swiper/card_swiper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proyecto_final/models/monster_info.dart';
 import 'package:proyecto_final/providers/monster_info_provider.dart';
 
-class MonsterSearch extends StatelessWidget {
-  const MonsterSearch({super.key});
+class ChallengeRatingScreen extends StatelessWidget {
+  const ChallengeRatingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    List<String> cr = ["0", "1", "2", "3", "4", "5"];
+    final size = MediaQuery.of(context).size;
+
+    final monsterProvider = Provider.of<MonsterInfoProvider>(context);
+    final String challenge =
+        ModalRoute.of(context)?.settings.arguments as String;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Monsters'),
+        title: const Text('Challenge Rating'),
         actions: [
           IconButton(
             onPressed: () {
@@ -22,53 +28,40 @@ class MonsterSearch extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: GridView.builder(
-          padding: const EdgeInsets.only(top: 10, bottom: 20),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-          ),
-          itemCount: cr.length,
-          itemBuilder: (_, index) {
-            return _GridElement(challenge: cr[index]);
+      body: Center(
+        child: FutureBuilder(
+          future: monsterProvider.getAllMonsterByCR(challenge),
+          builder: (_, snapshot) {
+            if (snapshot.hasData) {
+              List<MonsterInfo> monsterDataList =
+                  snapshot.data as List<MonsterInfo>;
+
+              return SizedBox(
+                width: double.infinity,
+                height: size.height * 0.5,
+                child: Swiper(
+                  layout: SwiperLayout.STACK,
+                  itemWidth: size.width * 0.8,
+                  itemHeight: size.height * 0.4,
+                  itemCount: monsterDataList.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () => Navigator.pushNamed(
+                          context, 'monsterDetails',
+                          arguments: monsterDataList[index]),
+                      child: Container(
+                        color: Colors.red,
+                        child: Center(
+                          child: Text(monsterDataList[index].name),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }
+            return const CupertinoActivityIndicator();
           },
-        ),
-      ),
-    );
-  }
-}
-
-class _GridElement extends StatelessWidget {
-  const _GridElement({
-    super.key,
-    required this.challenge,
-  });
-
-  final String challenge;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () =>
-          Navigator.pushNamed(context, 'challengeRating', arguments: challenge),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Container(
-          color: const Color.fromARGB(255, 86, 86, 86),
-          child: Center(
-            child: Text(
-              'Challenge Rating $challenge',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 25,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
         ),
       ),
     );
@@ -107,6 +100,8 @@ class _CustomSearchDelegate extends SearchDelegate {
     final monsterInfoProvider = Provider.of<MonsterInfoProvider>(context);
     List<MonsterInfo> searchTerms = monsterInfoProvider.monsterList;
     List<MonsterInfo> matchQuery = [];
+
+    // TODO: intenta realizar un find u otra funcion que no sea recorrer el for
     for (MonsterInfo monster in searchTerms) {
       if (monster.name.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(monster);

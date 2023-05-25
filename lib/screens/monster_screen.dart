@@ -184,10 +184,10 @@ class _DescriptionAndImage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(20),
           child: FadeInImage(
-            placeholder: const AssetImage('assets/loading.gif'),
+            placeholder: const AssetImage('assets/loading-icon.gif'),
             image: NetworkImage(
               monster.imgMain ??
-                  'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png',
+                  'https://drive.google.com/file/d/1NuQghQVg1wCxGqtyJsegXUJaG1i6HJOY/view?usp=sharing',
             ),
             fit: BoxFit.cover,
             height: 250,

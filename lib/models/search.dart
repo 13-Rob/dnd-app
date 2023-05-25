@@ -12,13 +12,13 @@ SearchResults searchResultsFromJson(String str) =>
 String searchResultsToJson(SearchResults data) => json.encode(data.toJson());
 
 class SearchResults {
-  int count;
+  int? count;
   dynamic next;
   dynamic previous;
   List<MonsterInfo> results;
 
   SearchResults({
-    required this.count,
+    this.count,
     this.next,
     this.previous,
     required this.results,

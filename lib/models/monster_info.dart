@@ -141,8 +141,9 @@ class MonsterInfo {
         languages: json["languages"],
         challengeRating: json["challenge_rating"],
         cr: json["cr"],
-        actions:
-            List<Action>.from(json["actions"].map((x) => Action.fromJson(x))),
+        actions: json["actions"] != ""
+            ? List<Action>.from(json["actions"].map((x) => Action.fromJson(x)))
+            : [],
         // reactions: json["reactions"],
         legendaryDesc: json["legendary_desc"],
         legendaryActions: json["legendary_actions"] != ""
