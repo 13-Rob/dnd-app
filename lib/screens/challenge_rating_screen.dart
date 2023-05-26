@@ -51,96 +51,76 @@ class ChallengeRatingScreen extends StatelessWidget {
                         onTap: () => Navigator.pushNamed(
                             context, 'monsterDetails',
                             arguments: monsterDataList[index]),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            color: const Color.fromARGB(255, 86, 86, 86),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'HP: ${monsterDataList[index].hitPoints}',
-                                    style: const TextStyle(
-                                      color: Color.fromARGB(255, 227, 227, 227),
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 20,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    monsterDataList[index].name,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 24,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    '${monsterDataList[index].size} ${monsterDataList[index].type}',
-                                    style: const TextStyle(
-                                      color: Color.fromARGB(255, 227, 226, 226),
-                                      fontSize: 18,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                        child: _GridItem(
+                            monsterDataList: monsterDataList, index: index),
                       );
                     },
                   ),
                 ),
-                // child: Swiper(
-                //   layout: SwiperLayout.STACK,
-                //   itemWidth: size.width * 0.8,
-                //   itemHeight: size.height * 0.4,
-                //   itemCount: monsterDataList.length,
-                //   itemBuilder: (context, index) {
-                //     return GestureDetector(
-                //       onTap: () => Navigator.pushNamed(
-                //           context, 'monsterDetails',
-                //           arguments: monsterDataList[index]),
-                //       child: ClipRRect(
-                //         borderRadius: BorderRadius.circular(20),
-                //         child: Container(
-                //           color: Colors.red,
-                //           child: Center(
-                //             child: Column(
-                //               mainAxisAlignment: MainAxisAlignment.center,
-                //               children: [
-                //                 Text(
-                //                   'HP: ${monsterDataList[index].hitPoints}',
-                //                   style: Theme.of(context).textTheme.titleLarge,
-                //                 ),
-                //                 const SizedBox(
-                //                   height: 10,
-                //                 ),
-                //                 Text(
-                //                   monsterDataList[index].name,
-                //                   style: Theme.of(context).textTheme.titleLarge,
-                //                 ),
-                //               ],
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     );
-                //   },
-                // ),
               );
             }
             return const CupertinoActivityIndicator();
           },
+        ),
+      ),
+    );
+  }
+}
+
+class _GridItem extends StatelessWidget {
+  const _GridItem({
+    super.key,
+    required this.monsterDataList,
+    required this.index,
+  });
+
+  final List<MonsterInfo> monsterDataList;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        color: const Color.fromARGB(255, 86, 86, 86),
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'HP: ${monsterDataList[index].hitPoints}',
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 227, 227, 227),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Text(
+                monsterDataList[index].name,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 24,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Text(
+                '${monsterDataList[index].size} ${monsterDataList[index].type}',
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 227, 226, 226),
+                  fontSize: 18,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -15,25 +15,24 @@ class AppState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => FavoriteProvider()),
-          ChangeNotifierProvider(create: (_) => UiProvider()),
-          ChangeNotifierProvider(
-            create: (_) => MonsterInfoProvider(),
-            lazy: true,
-          ),
-        ],
-        child: FutureBuilder(
-          future: DBProvider.db.database,
-          builder: (_, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return const MyApp();
-            }
-            return const CupertinoActivityIndicator();
-          },
-        )
-        // child: const MyApp(),
-        );
+      providers: [
+        ChangeNotifierProvider(create: (_) => FavoriteProvider()),
+        ChangeNotifierProvider(create: (_) => UiProvider()),
+        ChangeNotifierProvider(
+          create: (_) => MonsterInfoProvider(),
+          lazy: true,
+        ),
+      ],
+      child: FutureBuilder(
+        future: DBProvider.db.database,
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return const MyApp();
+          }
+          return const CupertinoActivityIndicator();
+        },
+      ),
+    );
   }
 }
 
@@ -49,6 +48,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.red).copyWith(
         appBarTheme: const AppBarTheme(color: Color.fromARGB(255, 119, 22, 22)),
       ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

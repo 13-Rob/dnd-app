@@ -158,42 +158,6 @@ class _Actions extends StatelessWidget {
               ))
           .toList(),
     );
-    // Padding(
-    //   padding: const EdgeInsets.symmetric(vertical: 4),
-    //   child: Column(
-    //     children: [
-    //       const Padding(
-    //         padding: EdgeInsets.only(bottom: 4.0),
-    //         child: Text(
-    //           'Actions:',
-    //           style: TextStyle(fontWeight: FontWeight.bold),
-    //         ),
-    //       ),
-    //       ...actions.map(
-    //         (e) {
-    //           return Padding(
-    //             padding:
-    //                 const EdgeInsets.symmetric(vertical: 4, horizontal: 30),
-    //             child: Center(
-    //               child: RichText(
-    //                 textAlign: TextAlign.justify,
-    //                 text: TextSpan(
-    //                   style: const TextStyle(color: Colors.black),
-    //                   children: [
-    //                     TextSpan(text: e.name),
-    //                     if (e.damageDice != null)
-    //                       TextSpan(text: ': ${e.damageDice}'),
-    //                     if (e.damageBonus != null)
-    //                       TextSpan(text: '+${e.damageBonus}')
-    //                   ],
-    //                 ),
-    //               ),
-    //             ),
-    //           );
-    //   },
-    // ).toList(),
-    // ],
-    // ),
   }
 }
 
