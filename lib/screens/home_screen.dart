@@ -31,13 +31,13 @@ class _HomePageBody extends StatelessWidget {
 
     switch (currentIndex) {
       case 0:
-        return const WeaponsScreen();
+        return const FavoriteScreen();
 
       case 1:
         return const MonsterSearch();
 
       default:
-        return const WeaponsScreen();
+        return const FavoriteScreen();
     }
   }
 }

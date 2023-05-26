@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:proyecto_final/models/monster_info.dart' as mon;
+import 'package:proyecto_final/providers/db_provider.dart';
+import 'package:proyecto_final/providers/favorite_provider.dart';
 import 'package:proyecto_final/widgets/custom_divider_widget.dart';
 import 'package:proyecto_final/widgets/stats_widget.dart';
 
-class MonsterScreen extends StatelessWidget {
+class MonsterScreen extends StatefulWidget {
   const MonsterScreen({super.key});
+
+  @override
+  State<MonsterScreen> createState() => _MonsterScreenState();
+}
+
+class _MonsterScreenState extends State<MonsterScreen> {
+  bool favorite = false;
+  Icon favoriteIcon = Icon(Icons.favorite_border_outlined);
 
   @override
   Widget build(BuildContext context) {
     final mon.MonsterInfo monsterData =
         ModalRoute.of(context)?.settings.arguments as mon.MonsterInfo;
+    final favoriteProvider = Provider.of<FavoriteProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -19,9 +32,20 @@ class MonsterScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              print('${monsterData.name} agregado a favoritos');
+              if (favorite) {
+                setState(() {
+                  favoriteIcon = const Icon(Icons.favorite_border);
+                });
+                favorite = false;
+              } else {
+                favoriteProvider.newFavorite(monsterData.slug);
+                setState(() {
+                  favoriteIcon = const Icon(Icons.favorite);
+                });
+                favorite = true;
+              }
             },
-            icon: const Icon(Icons.favorite_border_outlined),
+            icon: favoriteIcon,
           ),
         ],
       ),

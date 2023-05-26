@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class WeaponsScreen extends StatelessWidget {
-  const WeaponsScreen({super.key});
+class FavoriteScreen extends StatelessWidget {
+  const FavoriteScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Weapons'),
+        title: const Text('Favorite'),
       ),
       body: const Center(
-        child: Text('Weapons'),
+        child: Text('Favorite'),
       ),
     );
   }
