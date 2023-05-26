@@ -18,10 +18,7 @@ class AppState extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => FavoriteProvider()),
         ChangeNotifierProvider(create: (_) => UiProvider()),
-        ChangeNotifierProvider(
-          create: (_) => MonsterInfoProvider(),
-          lazy: true,
-        ),
+        ChangeNotifierProvider(create: (_) => MonsterInfoProvider()),
       ],
       child: FutureBuilder(
         future: DBProvider.db.database,

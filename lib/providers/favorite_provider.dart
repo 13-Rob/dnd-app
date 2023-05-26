@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final/models/favorite.dart';
-import 'package:proyecto_final/models/monster_info.dart';
 import 'package:proyecto_final/providers/db_provider.dart';
 
 class FavoriteProvider extends ChangeNotifier {
   List<FavoriteModel> favorite = [];
 
-  newFavorite(MonsterInfo mon) async {
-    FavoriteModel fav = FavoriteModel(
-      slug: mon.slug,
-      name: mon.name,
-      hp: mon.hitPoints.toString(),
-      type: mon.alignment,
-      size: mon.size,
-    );
-
-    int id = await DBProvider.db.newFavorite(fav);
-    fav.id = id;
-    favorite.add(fav);
+  newFavorite(FavoriteModel mon) async {
+    if (!favorite.contains(mon)) {
+      int id = await DBProvider.db.newFavorite(mon);
+      mon.id = id;
+      favorite.add(mon);
+    }
     notifyListeners();
   }
 

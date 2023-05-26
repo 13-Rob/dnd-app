@@ -20,10 +20,15 @@ class MonsterInfoProvider extends ChangeNotifier {
     return response.body;
   }
 
-  Future<MonsterInfo> getMonsterDetails(String monster) async {
-    final jsonData = await _getJsonData('monsters/$monster');
-    final monsterResponse = MonsterInfo.fromJson(json.decode(jsonData));
+  Future<String> _getJsonDataNoParams(String endpoint) async {
+    var url = Uri.https(_baseUrl, endpoint);
+    var response = await http.get(url);
+    return response.body;
+  }
 
+  Future<MonsterInfo> getMonsterDetails(String monster) async {
+    final jsonData = await _getJsonDataNoParams('monsters/$monster');
+    final monsterResponse = MonsterInfo.fromJson(json.decode(jsonData));
     return monsterResponse;
   }
 
@@ -37,12 +42,6 @@ class MonsterInfoProvider extends ChangeNotifier {
     final jsonData = await _getJsonData('monsters/', term, cr);
     final monsterResponse = SearchResults.fromJson(json.decode(jsonData));
     monsterList = monsterResponse.results;
-  }
-
-  Future<MonsterInfo> getMonsterByName({required String name}) async {
-    final jsonData = await _getJsonData('monsters/', name, '');
-    final monsterResponse = SearchResults.fromJson(json.decode(jsonData));
-    return monsterResponse.results.first;
   }
 
   Future<List<MonsterInfo>> getAllMonsterByCR([String cr = '']) async {

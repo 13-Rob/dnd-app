@@ -173,7 +173,7 @@ class _CustomSearchDelegate extends SearchDelegate {
         return ListTile(
           title: Text(monster.name),
           onTap: () => Navigator.pushNamed(context, 'monsterDetails',
-              arguments: monster),
+              arguments: monster.name),
         );
       },
     );

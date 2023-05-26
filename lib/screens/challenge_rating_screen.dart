@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:proyecto_final/models/favorite.dart';
 import 'package:proyecto_final/models/monster_info.dart';
+import 'package:proyecto_final/providers/favorite_provider.dart';
 import 'package:proyecto_final/providers/monster_info_provider.dart';
 
 class ChallengeRatingScreen extends StatelessWidget {
@@ -10,12 +12,14 @@ class ChallengeRatingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final monsterProvider = Provider.of<MonsterInfoProvider>(context);
+    final favoriteProvider = Provider.of<FavoriteProvider>(context);
+
     final String challenge =
         ModalRoute.of(context)?.settings.arguments as String;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Monsters'),
+        title: Text('Challenge Rating $challenge'),
         actions: [
           IconButton(
             onPressed: () {
@@ -32,7 +36,6 @@ class ChallengeRatingScreen extends StatelessWidget {
             if (snapshot.hasData) {
               List<MonsterInfo> monsterDataList =
                   snapshot.data as List<MonsterInfo>;
-
               return SizedBox(
                 width: double.infinity,
                 child: Padding(
@@ -46,11 +49,19 @@ class ChallengeRatingScreen extends StatelessWidget {
                       crossAxisCount: 2,
                     ),
                     itemCount: monsterDataList.length,
-                    itemBuilder: (BuildContext context, int index) {
+                    itemBuilder: (context, index) {
                       return InkWell(
-                        onTap: () => Navigator.pushNamed(
-                            context, 'monsterDetails',
-                            arguments: monsterDataList[index]),
+                        onTap: () {
+                          FavoriteModel temp = FavoriteModel(
+                            slug: monsterDataList[index].slug,
+                            name: monsterDataList[index].name,
+                            hp: monsterDataList[index].hitPoints.toString(),
+                            type: monsterDataList[index].type,
+                            size: monsterDataList[index].size,
+                          );
+                          Navigator.pushNamed(context, 'monsterDetails',
+                              arguments: temp);
+                        },
                         child: _GridItem(
                             monsterDataList: monsterDataList, index: index),
                       );
@@ -69,7 +80,6 @@ class ChallengeRatingScreen extends StatelessWidget {
 
 class _GridItem extends StatelessWidget {
   const _GridItem({
-    super.key,
     required this.monsterDataList,
     required this.index,
   });
@@ -197,7 +207,7 @@ class _CustomSearchDelegate extends SearchDelegate {
         return ListTile(
           title: Text(monster.name),
           onTap: () => Navigator.pushNamed(context, 'monsterDetails',
-              arguments: monster),
+              arguments: monster.name),
         );
       },
     );

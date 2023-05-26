@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:proyecto_final/models/favorite.dart';
 import 'package:proyecto_final/models/monster_info.dart' as mon;
 import 'package:proyecto_final/providers/favorite_provider.dart';
+import 'package:proyecto_final/providers/monster_info_provider.dart';
 import 'package:proyecto_final/widgets/custom_divider_widget.dart';
 import 'package:proyecto_final/widgets/stats_widget.dart';
 
@@ -13,36 +16,41 @@ class MonsterScreen extends StatefulWidget {
 }
 
 class _MonsterScreenState extends State<MonsterScreen> {
-  Icon favoriteIcon = const Icon(Icons.favorite_border_outlined);
-
   @override
   Widget build(BuildContext context) {
-    final mon.MonsterInfo monsterData =
-        ModalRoute.of(context)?.settings.arguments as mon.MonsterInfo;
-    final favoriteProvider = Provider.of<FavoriteProvider>(context);
+    final favoriteProvider =
+        Provider.of<FavoriteProvider>(context, listen: false);
+    final monsterProvider = Provider.of<MonsterInfoProvider>(context);
+
+    FavoriteModel monster =
+        ModalRoute.of(context)?.settings.arguments as FavoriteModel;
 
     bool favorite =
-        favoriteProvider.favorite.any((e) => e.name == monsterData.name);
+        favoriteProvider.favorite.any((e) => e.name == monster.name);
+
+    Icon favoriteIcon = favorite
+        ? const Icon(Icons.favorite)
+        : const Icon(Icons.favorite_border);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          monsterData.name,
+          monster.name,
           style: Theme.of(context).appBarTheme.titleTextStyle,
         ),
         actions: [
           IconButton(
             onPressed: () {
               if (favorite) {
-                favoriteProvider.eraseFavByName(monsterData.name);
+                favoriteProvider.eraseFavByName(monster.name);
                 setState(() {
                   favoriteIcon = const Icon(Icons.favorite_border);
                 });
                 favorite = false;
               } else {
-                favoriteProvider.newFavorite(monsterData);
+                favoriteProvider.newFavorite(monster);
                 setState(() {
-                  favoriteIcon = const Icon(Icons.favorite_border_outlined);
+                  favoriteIcon = const Icon(Icons.favorite);
                 });
                 favorite = true;
               }
@@ -51,33 +59,37 @@ class _MonsterScreenState extends State<MonsterScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 30.0),
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _MonsterHeader(monster: monsterData),
-                _DescriptionAndImage(monster: monsterData),
-                Stats(
-                  monster: monsterData,
-                ),
-                const CustomDivider(),
-                _Actions(actions: monsterData.actions),
-                if (monsterData.specialAbilities!.isNotEmpty)
-                  _NameAndDescList(
-                      name: 'Special Abilities',
-                      abilities: monsterData.specialAbilities!),
-                if (monsterData.legendaryActions!.isNotEmpty)
-                  _NameAndDescList(
-                      name: 'Legendary Actions',
-                      abilities: monsterData.legendaryActions!),
-                const CustomDivider()
-              ],
-            ),
-          ),
-        ),
+      body: FutureBuilder(
+        future: monsterProvider.getMonsterDetails(monster.slug),
+        builder: (_, snapshot) {
+          if (snapshot.hasData) {
+            mon.MonsterInfo monsterData = snapshot.data as mon.MonsterInfo;
+            return SingleChildScrollView(
+              child: Column(
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _MonsterHeader(monster: monsterData),
+                  _DescriptionAndImage(monster: monsterData),
+                  Stats(
+                    monster: monsterData,
+                  ),
+                  const CustomDivider(),
+                  _Actions(actions: monsterData.actions),
+                  if (monsterData.specialAbilities!.isNotEmpty)
+                    _NameAndDescList(
+                        name: 'Special Abilities',
+                        abilities: monsterData.specialAbilities!),
+                  if (monsterData.legendaryActions!.isNotEmpty)
+                    _NameAndDescList(
+                        name: 'Legendary Actions',
+                        abilities: monsterData.legendaryActions!),
+                  const CustomDivider()
+                ],
+              ),
+            );
+          }
+          return const Center(child: CupertinoActivityIndicator());
+        },
       ),
     );
   }

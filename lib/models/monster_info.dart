@@ -155,7 +155,7 @@ class MonsterInfo {
                 .map((x) => LegendaryAction.fromJson(x)))
             : [],
         spellList: List<dynamic>.from(json["spell_list"].map((x) => x)),
-        pageNo: json["page_no"],
+        pageNo: json["page_no"] ?? 0,
         imgMain: json["img_main"],
         documentSlug: json["document__slug"],
         documentTitle: json["document__title"],
