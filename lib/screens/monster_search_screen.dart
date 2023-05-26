@@ -153,9 +153,7 @@ class _CustomSearchDelegate extends SearchDelegate {
   }
 
   @override
-  Widget buildSuggestions(
-    BuildContext context,
-  ) {
+  Widget buildSuggestions(BuildContext context) {
     final monsterInfoProvider =
         Provider.of<MonsterInfoProvider>(context, listen: true);
     monsterInfoProvider.getMonsters(query);

@@ -6,14 +6,12 @@ import 'package:sqflite/sqflite.dart';
 
 class DBProvider {
   static Database? _database;
-
   static final DBProvider db = DBProvider._();
 
   DBProvider._();
 
   get database async {
     if (_database != null) return _database;
-
     _database = await initDB();
   }
 
@@ -21,10 +19,11 @@ class DBProvider {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentDirectory.path, 'TableFavorites.db');
 
-    // print('DB Path $path');
-
-    return await openDatabase(path, version: 1, onCreate: (db, version) async {
-      await db.execute('''
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (db, version) async {
+        await db.execute('''
         CREATE TABLE TableFavorites (
           id INTEGER PRIMARY KEY,
           slug TEXT,
@@ -34,14 +33,13 @@ class DBProvider {
           size TEXT
         )
         ''');
-    });
+      },
+    );
   }
 
   newFavorite(FavoriteModel monster) async {
     final Database db = await database;
-
     final id = await db.insert('TableFavorites', monster.toJson());
-    // print(id);
     return id;
   }
 

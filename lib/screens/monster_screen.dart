@@ -162,9 +162,7 @@ class _Actions extends StatelessWidget {
 }
 
 class _DescriptionAndImage extends StatelessWidget {
-  const _DescriptionAndImage({
-    required this.monster,
-  });
+  const _DescriptionAndImage({required this.monster});
 
   final mon.MonsterInfo monster;
 

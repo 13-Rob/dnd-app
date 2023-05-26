@@ -28,7 +28,6 @@ class MonsterInfoProvider extends ChangeNotifier {
   }
 
   getMonsters(String term) async {
-    // print(term);
     final jsonData = await _getJsonData('monsters/', term);
     final monsterResponse = SearchResults.fromJson(json.decode(jsonData));
     monsterList = monsterResponse.results;

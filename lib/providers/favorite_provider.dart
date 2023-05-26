@@ -45,7 +45,6 @@ class FavoriteProvider extends ChangeNotifier {
 
   eraseFavByID(int id) async {
     await DBProvider.db.deleteFav(id);
-
     loadFavorites();
   }
 }
