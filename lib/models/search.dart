@@ -42,9 +42,9 @@ class SearchResults {
       };
 }
 
-enum Subtype { EMPTY, DEVIL }
+enum Subtype { empty, devil }
 
-final subtypeValues = EnumValues({"devil": Subtype.DEVIL, "": Subtype.EMPTY});
+final subtypeValues = EnumValues({"devil": Subtype.devil, "": Subtype.empty});
 
 class EnumValues<T> {
   Map<String, T> map;

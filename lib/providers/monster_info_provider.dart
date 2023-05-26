@@ -28,6 +28,7 @@ class MonsterInfoProvider extends ChangeNotifier {
   }
 
   getMonsters(String term) async {
+    // print(term);
     final jsonData = await _getJsonData('monsters/', term);
     final monsterResponse = SearchResults.fromJson(json.decode(jsonData));
     monsterList = monsterResponse.results;
@@ -37,6 +38,12 @@ class MonsterInfoProvider extends ChangeNotifier {
     final jsonData = await _getJsonData('monsters/', term, cr);
     final monsterResponse = SearchResults.fromJson(json.decode(jsonData));
     monsterList = monsterResponse.results;
+  }
+
+  Future<MonsterInfo> getMonsterByName({required String name}) async {
+    final jsonData = await _getJsonData('monsters/', name, '');
+    final monsterResponse = SearchResults.fromJson(json.decode(jsonData));
+    return monsterResponse.results.first;
   }
 
   Future<List<MonsterInfo>> getAllMonsterByCR([String cr = '']) async {

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proyecto_final/providers/db_provider.dart';
@@ -14,16 +15,25 @@ class AppState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => FavoriteProvider()),
-        ChangeNotifierProvider(create: (_) => UiProvider()),
-        ChangeNotifierProvider(
-          create: (_) => MonsterInfoProvider(),
-          lazy: true,
-        ),
-      ],
-      child: const MyApp(),
-    );
+        providers: [
+          ChangeNotifierProvider(create: (_) => FavoriteProvider()),
+          ChangeNotifierProvider(create: (_) => UiProvider()),
+          ChangeNotifierProvider(
+            create: (_) => MonsterInfoProvider(),
+            lazy: true,
+          ),
+        ],
+        child: FutureBuilder(
+          future: DBProvider.db.database,
+          builder: (_, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return const MyApp();
+            }
+            return const CupertinoActivityIndicator();
+          },
+        )
+        // child: const MyApp(),
+        );
   }
 }
 

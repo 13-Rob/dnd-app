@@ -70,7 +70,7 @@ class MonsterSearch extends StatelessWidget {
 }
 
 class _GridElement extends StatelessWidget {
-  const _GridElement({super.key, required this.challenge, required this.index});
+  const _GridElement({required this.challenge, required this.index});
 
   final String challenge;
   final int index;
@@ -153,8 +153,11 @@ class _CustomSearchDelegate extends SearchDelegate {
   }
 
   @override
-  Widget buildSuggestions(BuildContext context) {
-    final monsterInfoProvider = Provider.of<MonsterInfoProvider>(context);
+  Widget buildSuggestions(
+    BuildContext context,
+  ) {
+    final monsterInfoProvider =
+        Provider.of<MonsterInfoProvider>(context, listen: true);
     monsterInfoProvider.getMonsters(query);
     List<MonsterInfo> searchTerms = monsterInfoProvider.monsterList;
     List<MonsterInfo> matchQuery = [];

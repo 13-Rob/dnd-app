@@ -19,15 +19,19 @@ class DBProvider {
 
   initDB() async {
     Directory documentDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentDirectory.path, 'FavoritesDB.db');
+    String path = join(documentDirectory.path, 'TableFavorites.db');
 
-    print('DB Path $path');
+    // print('DB Path $path');
 
     return await openDatabase(path, version: 1, onCreate: (db, version) async {
       await db.execute('''
-        CREATE TABLE Favorite (
+        CREATE TABLE TableFavorites (
           id INTEGER PRIMARY KEY,
-          slug TEXT
+          slug TEXT,
+          name TEXT,
+          hp INTEGER,
+          type TEXT,
+          size TEXT
         )
         ''');
     });
@@ -35,9 +39,35 @@ class DBProvider {
 
   newFavorite(FavoriteModel monster) async {
     final Database db = await database;
-    // final Database db = await database;
 
-    final id = await db.insert('FavoriteMons', monster.toJson());
+    final id = await db.insert('TableFavorites', monster.toJson());
+    // print(id);
     return id;
+  }
+
+  Future<List<FavoriteModel>?> getFavorites() async {
+    final Database db = await database;
+    final res = await db.query('TableFavorites');
+    if (res.isEmpty) {
+      return null;
+    }
+
+    return res.map((e) => FavoriteModel.fromJson(e)).toList();
+  }
+
+  Future<int> deleteFav(int id) async {
+    final Database db = await database;
+    return await db.delete('TableFavorites', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> deleteFavByName(String name) async {
+    final Database db = await database;
+    return await db
+        .delete('TableFavorites', where: 'name = ?', whereArgs: [name]);
+  }
+
+  Future<int> deleteAllFavs() async {
+    final Database db = await database;
+    return await db.delete('TableFavorites');
   }
 }

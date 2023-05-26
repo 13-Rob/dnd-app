@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proyecto_final/models/monster_info.dart' as mon;
-import 'package:proyecto_final/providers/db_provider.dart';
 import 'package:proyecto_final/providers/favorite_provider.dart';
 import 'package:proyecto_final/widgets/custom_divider_widget.dart';
 import 'package:proyecto_final/widgets/stats_widget.dart';
@@ -14,14 +13,16 @@ class MonsterScreen extends StatefulWidget {
 }
 
 class _MonsterScreenState extends State<MonsterScreen> {
-  bool favorite = false;
-  Icon favoriteIcon = Icon(Icons.favorite_border_outlined);
+  Icon favoriteIcon = const Icon(Icons.favorite_border_outlined);
 
   @override
   Widget build(BuildContext context) {
     final mon.MonsterInfo monsterData =
         ModalRoute.of(context)?.settings.arguments as mon.MonsterInfo;
     final favoriteProvider = Provider.of<FavoriteProvider>(context);
+
+    bool favorite =
+        favoriteProvider.favorite.any((e) => e.name == monsterData.name);
 
     return Scaffold(
       appBar: AppBar(
@@ -33,19 +34,23 @@ class _MonsterScreenState extends State<MonsterScreen> {
           IconButton(
             onPressed: () {
               if (favorite) {
+                favoriteProvider.eraseFavByName(monsterData.name);
                 setState(() {
                   favoriteIcon = const Icon(Icons.favorite_border);
                 });
                 favorite = false;
               } else {
-                favoriteProvider.newFavorite(monsterData.slug);
+                favoriteProvider.newFavorite(monsterData);
                 setState(() {
-                  favoriteIcon = const Icon(Icons.favorite);
+                  favoriteIcon = const Icon(Icons.favorite_border_outlined);
                 });
                 favorite = true;
               }
             },
-            icon: favoriteIcon,
+            icon:
+                favoriteProvider.favorite.any((e) => e.name == monsterData.name)
+                    ? const Icon(Icons.favorite)
+                    : const Icon(Icons.favorite_outline),
           ),
         ],
       ),
@@ -63,11 +68,11 @@ class _MonsterScreenState extends State<MonsterScreen> {
                 ),
                 const CustomDivider(),
                 _Actions(actions: monsterData.actions),
-                if (monsterData.specialAbilities != null)
+                if (monsterData.specialAbilities!.isNotEmpty)
                   _NameAndDescList(
                       name: 'Special Abilities',
                       abilities: monsterData.specialAbilities!),
-                if (monsterData.legendaryActions != null)
+                if (monsterData.legendaryActions!.isNotEmpty)
                   _NameAndDescList(
                       name: 'Legendary Actions',
                       abilities: monsterData.legendaryActions!),
@@ -82,7 +87,7 @@ class _MonsterScreenState extends State<MonsterScreen> {
 }
 
 class _MonsterHeader extends StatelessWidget {
-  const _MonsterHeader({super.key, required this.monster});
+  const _MonsterHeader({required this.monster});
 
   final mon.MonsterInfo monster;
 
@@ -92,14 +97,23 @@ class _MonsterHeader extends StatelessWidget {
       padding: const EdgeInsets.only(top: 16, bottom: 12, left: 40, right: 40),
       child: Column(
         children: [
-          Text('Hit Points: ${monster.hitPoints} (${monster.hitDice})'),
+          Text(
+            'Hit Points: ${monster.hitPoints} (${monster.hitDice})',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Armor Class: ${monster.armorClass}'),
+              Text(
+                'Armor Class: ${monster.armorClass}',
+                style: const TextStyle(fontSize: 20),
+              ),
               if (monster.speed.walk != null)
-                Text('Speed: ${monster.speed.walk} ft.'),
+                Text(
+                  'Speed: ${monster.speed.walk} ft.',
+                  style: const TextStyle(fontSize: 20),
+                ),
             ],
           ),
         ],
@@ -109,8 +123,7 @@ class _MonsterHeader extends StatelessWidget {
 }
 
 class _NameAndDescList extends StatelessWidget {
-  const _NameAndDescList(
-      {super.key, required this.name, required this.abilities});
+  const _NameAndDescList({required this.name, required this.abilities});
 
   final String name;
   final List<mon.LegendaryAction> abilities;
@@ -131,7 +144,7 @@ class _NameAndDescList extends StatelessWidget {
 }
 
 class _Actions extends StatelessWidget {
-  const _Actions({super.key, required this.actions});
+  const _Actions({required this.actions});
 
   final List<mon.Action> actions;
 
@@ -189,7 +202,6 @@ class _Actions extends StatelessWidget {
 
 class _DescriptionAndImage extends StatelessWidget {
   const _DescriptionAndImage({
-    super.key,
     required this.monster,
   });
 

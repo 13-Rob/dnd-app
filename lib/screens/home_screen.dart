@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:proyecto_final/providers/db_provider.dart';
+import 'package:proyecto_final/providers/favorite_provider.dart';
 import 'package:proyecto_final/providers/ui_provider.dart';
 import 'package:proyecto_final/widgets/custom_navigation_bar.dart';
 import 'package:proyecto_final/screens/screens.dart';
@@ -18,19 +18,17 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HomePageBody extends StatelessWidget {
-  const _HomePageBody({
-    super.key,
-  });
+  const _HomePageBody();
 
   @override
   Widget build(BuildContext context) {
     final uiProvider = Provider.of<UiProvider>(context);
     final currentIndex = uiProvider.selectedMenuOption;
-
-    // DBProvider.db.initDB();
+    final favoriteProvider = Provider.of<FavoriteProvider>(context);
 
     switch (currentIndex) {
       case 0:
+        favoriteProvider.loadFavorites();
         return const FavoriteScreen();
 
       case 1:

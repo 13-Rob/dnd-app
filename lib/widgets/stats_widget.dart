@@ -31,7 +31,7 @@ class Stats extends StatelessWidget {
 }
 
 class _StatDisplay extends StatelessWidget {
-  const _StatDisplay({super.key, required this.stat});
+  const _StatDisplay({required this.stat});
 
   final List stat;
 
