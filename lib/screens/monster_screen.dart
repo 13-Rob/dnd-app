@@ -47,10 +47,7 @@ class _MonsterScreenState extends State<MonsterScreen> {
                 favorite = true;
               }
             },
-            icon:
-                favoriteProvider.favorite.any((e) => e.name == monsterData.name)
-                    ? const Icon(Icons.favorite)
-                    : const Icon(Icons.favorite_outline),
+            icon: favoriteIcon,
           ),
         ],
       ),
