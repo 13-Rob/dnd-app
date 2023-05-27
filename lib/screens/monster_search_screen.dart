@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:proyecto_final/models/favorite.dart';
 import 'package:proyecto_final/models/monster_info.dart';
 import 'package:proyecto_final/providers/monster_info_provider.dart';
 
@@ -172,8 +173,15 @@ class _CustomSearchDelegate extends SearchDelegate {
         MonsterInfo monster = matchQuery[index];
         return ListTile(
           title: Text(monster.name),
-          onTap: () => Navigator.pushNamed(context, 'monsterDetails',
-              arguments: monster.name),
+          onTap: () {
+            FavoriteModel temp = FavoriteModel(
+                slug: monster.slug,
+                name: monster.name,
+                hp: monster.hitPoints.toString(),
+                type: monster.type,
+                size: monster.size);
+            Navigator.pushNamed(context, 'monsterDetails', arguments: temp);
+          },
         );
       },
     );

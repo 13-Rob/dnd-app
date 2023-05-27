@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proyecto_final/models/favorite.dart';
 import 'package:proyecto_final/models/monster_info.dart';
-import 'package:proyecto_final/providers/favorite_provider.dart';
 import 'package:proyecto_final/providers/monster_info_provider.dart';
 
 class ChallengeRatingScreen extends StatelessWidget {
@@ -12,7 +11,6 @@ class ChallengeRatingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final monsterProvider = Provider.of<MonsterInfoProvider>(context);
-    final favoriteProvider = Provider.of<FavoriteProvider>(context);
 
     final String challenge =
         ModalRoute.of(context)?.settings.arguments as String;
@@ -122,17 +120,65 @@ class _GridItem extends StatelessWidget {
               const SizedBox(
                 height: 4,
               ),
-              Text(
-                '${monsterDataList[index].size} ${monsterDataList[index].type}',
-                style: const TextStyle(
-                  color: Color.fromARGB(255, 227, 226, 226),
-                  fontSize: 18,
-                ),
-              )
+              _IlustratedDetails(monster: monsterDataList[index])
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _IlustratedDetails extends StatelessWidget {
+  const _IlustratedDetails({
+    required this.monster,
+  });
+
+  final MonsterInfo monster;
+
+  @override
+  Widget build(BuildContext context) {
+    int sizeNum = 0;
+    List<Widget> iconsList = [];
+
+    switch (monster.size.toLowerCase()) {
+      case "small":
+        sizeNum = 1;
+        break;
+
+      case "medium":
+        sizeNum = 2;
+        break;
+
+      case "large":
+        sizeNum = 3;
+        break;
+
+      case "huge":
+        sizeNum = 4;
+        break;
+
+      case "gargantuan":
+        sizeNum = 5;
+        break;
+    }
+
+    for (int i = 1; i <= 5; i++) {
+      if (i <= sizeNum) {
+        iconsList.add(const Icon(
+          Icons.straighten_sharp,
+          color: Colors.white,
+        ));
+      } else {
+        iconsList.add(const Icon(
+          Icons.straighten_sharp,
+          color: Color.fromARGB(255, 172, 172, 172),
+        ));
+      }
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: iconsList,
     );
   }
 }
@@ -205,10 +251,16 @@ class _CustomSearchDelegate extends SearchDelegate {
       itemBuilder: (_, index) {
         MonsterInfo monster = matchQuery[index];
         return ListTile(
-          title: Text(monster.name),
-          onTap: () => Navigator.pushNamed(context, 'monsterDetails',
-              arguments: monster.name),
-        );
+            title: Text(monster.name),
+            onTap: () {
+              FavoriteModel temp = FavoriteModel(
+                  slug: monster.slug,
+                  name: monster.name,
+                  hp: monster.hitPoints.toString(),
+                  type: monster.type,
+                  size: monster.size);
+              Navigator.pushNamed(context, 'monsterDetails', arguments: temp);
+            });
       },
     );
   }
