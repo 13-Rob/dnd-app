@@ -26,6 +26,8 @@ class _HomePageBody extends StatelessWidget {
     final currentIndex = uiProvider.selectedMenuOption;
     final favoriteProvider = Provider.of<FavoriteProvider>(context);
 
+    // int favLength = favoriteProvider.favorite.length;
+
     switch (currentIndex) {
       case 0:
         favoriteProvider.loadFavorites();

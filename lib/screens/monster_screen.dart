@@ -42,17 +42,17 @@ class _MonsterScreenState extends State<MonsterScreen> {
           IconButton(
             onPressed: () {
               if (favorite) {
-                favoriteProvider.eraseFavByName(monster.name);
+                favorite = false;
                 setState(() {
                   favoriteIcon = const Icon(Icons.favorite_border);
+                  favoriteProvider.eraseFavByName(monster.name);
                 });
-                favorite = false;
               } else {
-                favoriteProvider.newFavorite(monster);
+                favorite = true;
                 setState(() {
                   favoriteIcon = const Icon(Icons.favorite);
+                  favoriteProvider.newFavorite(monster);
                 });
-                favorite = true;
               }
             },
             icon: favoriteIcon,

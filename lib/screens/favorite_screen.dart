@@ -24,10 +24,11 @@ class FavoriteScreen extends StatelessWidget {
         ],
       ),
       body: ListView.separated(
+        separatorBuilder: (_, __) => const CustomDivider(),
         itemCount: favoriteProvider.favorite.length,
-        separatorBuilder: (_, index) => const CustomDivider(),
         itemBuilder: (context, index) {
           FavoriteModel temp = favoriteProvider.favorite[index];
+
           return ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 20),
             leading: const Icon(Icons.pets),
@@ -45,6 +46,9 @@ class FavoriteScreen extends StatelessWidget {
             ),
             onTap: () {
               Navigator.pushNamed(context, 'monsterDetails', arguments: temp);
+            },
+            onLongPress: () {
+              favoriteProvider.eraseFavByID(temp.id!);
             },
           );
         },

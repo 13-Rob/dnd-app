@@ -39,7 +39,8 @@ class DBProvider {
 
   newFavorite(FavoriteModel monster) async {
     final Database db = await database;
-    final id = await db.insert('TableFavorites', monster.toJson());
+    final id = await db.insert('TableFavorites', monster.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
     return id;
   }
 
