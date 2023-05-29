@@ -8,43 +8,65 @@ class MonsterInfoProvider extends ChangeNotifier {
   final String _baseUrl = 'api.open5e.com';
   List<MonsterInfo> monsterList = [];
 
-  Future<String> _getJsonData(String endpoint,
+  Future<String?> _getJsonData(String endpoint,
       [String term = '', String cr = '']) async {
     var url = Uri.https(_baseUrl, endpoint, {
       'search': term,
       'cr': cr,
     });
 
-    var response = await http.get(url);
+    try {
+      var response = await http.get(url);
 
-    return response.body;
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
   }
 
-  Future<String> _getJsonDataNoParams(String endpoint) async {
+  Future<String?> _getJsonDataNoParams(String endpoint) async {
     var url = Uri.https(_baseUrl, endpoint);
-    var response = await http.get(url);
-    return response.body;
+    try {
+      var response = await http.get(url);
+      return response.body;
+    } catch (e) {
+      return null;
+    }
   }
 
-  Future<MonsterInfo> getMonsterDetails(String monster) async {
+  Future<MonsterInfo?> getMonsterDetails(String monster) async {
     final jsonData = await _getJsonDataNoParams('monsters/$monster');
-    final monsterResponse = MonsterInfo.fromJson(json.decode(jsonData));
-    return monsterResponse;
+    if (jsonData != null) {
+      final monsterResponse = MonsterInfo.fromJson(json.decode(jsonData));
+      return monsterResponse;
+    } else {
+      return null;
+    }
   }
 
   getMonsters(String term) async {
     final jsonData = await _getJsonData('monsters/', term);
-    final monsterResponse = SearchResults.fromJson(json.decode(jsonData));
-    monsterList = monsterResponse.results;
+
+    if (jsonData != null) {
+      final monsterResponse = SearchResults.fromJson(json.decode(jsonData));
+      monsterList = monsterResponse.results;
+    }
   }
 
   getMonsterByCR([String term = '', String cr = '']) async {
     final jsonData = await _getJsonData('monsters/', term, cr);
-    final monsterResponse = SearchResults.fromJson(json.decode(jsonData));
-    monsterList = monsterResponse.results;
+
+    if (jsonData != null) {
+      final monsterResponse = SearchResults.fromJson(json.decode(jsonData));
+      monsterList = monsterResponse.results;
+    }
   }
 
-  Future<List<MonsterInfo>> getAllMonsterByCR([String cr = '']) async {
+  Future<List<MonsterInfo>?> getAllMonsterByCR([String cr = '']) async {
     List<String> crEspeciales = ["1/8", "1/4", "1/2"];
     if (crEspeciales.contains(cr)) {
       switch (cr) {
@@ -63,6 +85,9 @@ class MonsterInfoProvider extends ChangeNotifier {
     }
 
     final jsonData = await _getJsonData('monsters/', '', cr);
+
+    if (jsonData == null) return null;
+
     final monsterResponse = SearchResults.fromJson(json.decode(jsonData));
     return monsterResponse.results;
   }

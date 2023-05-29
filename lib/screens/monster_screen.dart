@@ -62,7 +62,14 @@ class _MonsterScreenState extends State<MonsterScreen> {
       body: FutureBuilder(
         future: monsterProvider.getMonsterDetails(monster.slug),
         builder: (_, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CupertinoActivityIndicator());
+          } else if (snapshot.hasError) {
+            return Text("Error: $snapshot.error");
+          } else if (snapshot.hasData) {
+            if (snapshot.data == null) {
+              return const Center(child: Text("Unable to load Monster Data"));
+            }
             mon.MonsterInfo monsterData = snapshot.data as mon.MonsterInfo;
             return SingleChildScrollView(
               child: Column(
@@ -87,8 +94,9 @@ class _MonsterScreenState extends State<MonsterScreen> {
                 ],
               ),
             );
+          } else {
+            return const Center(child: Text('No data available'));
           }
-          return const Center(child: CupertinoActivityIndicator());
         },
       ),
     );

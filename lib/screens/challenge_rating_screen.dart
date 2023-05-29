@@ -31,7 +31,15 @@ class ChallengeRatingScreen extends StatelessWidget {
         child: FutureBuilder(
           future: monsterProvider.getAllMonsterByCR(challenge),
           builder: (_, snapshot) {
-            if (snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CupertinoActivityIndicator();
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: $snapshot.error'));
+            } else if (snapshot.hasData) {
+              if (snapshot.data == null) {
+                return const Center(
+                    child: Text("Unable to load Challenge Rating"));
+              }
               List<MonsterInfo> monsterDataList =
                   snapshot.data as List<MonsterInfo>;
               return SizedBox(
@@ -67,8 +75,9 @@ class ChallengeRatingScreen extends StatelessWidget {
                   ),
                 ),
               );
+            } else {
+              return const Center(child: Text('No data available'));
             }
-            return const CupertinoActivityIndicator();
           },
         ),
       ),
